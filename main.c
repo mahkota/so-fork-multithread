@@ -86,21 +86,23 @@ void forkedProcess(char txtFileList[][128], int nFiles)
 {
     int pid1 = fork();
     
-    if (pid1 > 0)
+    switch (pid1)
     {
-        printf("Dis is parent\n");
-        for (int i = 0; i < nFiles/2; i++)
-        {
-            printf("%s: %d\n", txtFileList[i], checkTXLContent(txtFileList[i]));
-        }
-    }
-    else
-    {
-        printf("Dis is child\n");
+    case 0:
+        printf("-- Child Process --\n");
         for (int i = nFiles/2; i < nFiles; i++)
         {
-            printf("%s: %d\n", txtFileList[i], checkTXLContent(txtFileList[i]));
+            printf("%s: %d kata\n", txtFileList[i], checkTXLContent(txtFileList[i]));
         }
+        break;
+    
+    default:
+        printf("-- Parent Process --\n");
+        for (int i = 0; i < nFiles/2; i++)
+        {
+            printf("%s: %d kata\n", txtFileList[i], checkTXLContent(txtFileList[i]));
+        }
+        break;
     }
 }
 
@@ -110,7 +112,7 @@ int main()
 
     int nFiles = checkNumberOfFiles();
     
-    // printf("%d\n", nFiles);
+    printf("Jumlah file dengan ekstensi *.txt: %d\n", nFiles);
 
     char txtFileList[nFiles][128];
 
@@ -120,5 +122,3 @@ int main()
 
     return 0;
 }
-
-// Ini commit Argi
