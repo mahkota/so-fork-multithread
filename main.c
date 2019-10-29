@@ -2,7 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h> 
-#include <unistd.h> 
+#include <unistd.h>
+#include <pthread.h>
 
 void generateTXL()
 {
@@ -106,19 +107,82 @@ void forkedProcess(char txtFileList[][128], int nFiles)
     }
 }
 
+pthread_t tret1, tret2;
+
+void *myfunc(void *myvar){
+
+    char *mag;
+    mag = (char *) myvar; 
+
+    generateTXL();
+    int n = checkNumberOfFiles();
+    int i = 0, j = i+1;
+
+    char txtFileList[n][128];
+    fillList(txtFileList, n);
+
+    for(i=0; i<n; i++){
+        if(pthread_equal(tret1, pthread_self())){
+            if(i==0){
+                printf("%s\n", mag);
+                printf("%s: %d kata\n", txtFileList[i], checkTXLContent(txtFileList[i]));
+                printf("\n");
+                sleep(1);
+            }else{
+                i++;
+                printf("%s\n", mag);
+                printf("%s: %d kata\n", txtFileList[i], checkTXLContent(txtFileList[i]));
+                printf("\n");
+                sleep(1);
+            }
+        }else if(pthread_equal(tret2, pthread_self())){
+            i++;
+            printf("%s\n", mag);
+            printf("%s: %d kata\n", txtFileList[i], checkTXLContent(txtFileList[i]));
+            printf("\n");
+            sleep(1);
+        }
+    }
+    return NULL;
+}
+
 int main()
 {
-    generateTXL();
+    char c;
+    printf("Fork or Thread? (F/T)\n");
+    scanf(" %c", &c);
 
-    int nFiles = checkNumberOfFiles();
+    if(c == 'F')
+    {
+        generateTXL();
+
+        int nFiles = checkNumberOfFiles();
     
-    printf("Jumlah file dengan ekstensi *.txt: %d\n", nFiles);
+        printf("Jumlah file dengan ekstensi *.txt: %d\n", nFiles);
 
-    char txtFileList[nFiles][128];
+        char txtFileList[nFiles][128];
 
-    fillList(txtFileList, nFiles);
+        fillList(txtFileList, nFiles);
 
-    forkedProcess(txtFileList, nFiles);
+        forkedProcess(txtFileList, nFiles);
+    }
+    else if(c == 'T')
+    {
+
+        char *mag1 = "== First Thread ==\n";
+        char *mag2 = "== Second Thread ==\n";
+        int t1, t2;
+
+        int nFiles = checkNumberOfFiles();
+    
+        printf("Jumlah file dengan ekstensi *.txt: %d\n", nFiles);
+
+        t1 = pthread_create(&tret1, NULL, myfunc, (void *)mag1);    
+        t2 = pthread_create(&tret2, NULL, myfunc, (void *)mag2);    
+                
+        pthread_join(tret1, NULL);
+        pthread_join(tret2, NULL);
+    }
 
     return 0;
 }
