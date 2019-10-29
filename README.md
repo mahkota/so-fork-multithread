@@ -13,4 +13,6 @@ Cara Kerja Program:
 1. Program akan mengecek file dengan ekstensi *.txt di dalam direktori.
 2. Program akan mengeluarkan file bernama "index.txl" yang berisi daftar file *.txt.
 3. Program akan membaca file "index.txl" dan menjadikannya patokan untuk menghitung jumlah kata.
-4. Penghitungan jumlah kata akan dijalankan dengan fork/multi-threading.
+4. Penghitungan jumlah kata akan dijalankan dengan fork/multi-threading tergantung permintaan.
+
+Catatan: Masih ada bug pada multi-thread yang menyebabkan line terakhir masih mencetak "first thread".

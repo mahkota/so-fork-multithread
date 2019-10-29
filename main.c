@@ -5,6 +5,8 @@
 #include <unistd.h>
 #include <pthread.h>
 
+pthread_t tret1, tret2;
+
 void generateTXL()
 {
     system("ls *.txt > index.txl");
@@ -107,35 +109,41 @@ void forkedProcess(char txtFileList[][128], int nFiles)
     }
 }
 
-pthread_t tret1, tret2;
-
-void *myfunc(void *myvar){
+void *myfunc(void *myvar)
+{
 
     char *mag;
     mag = (char *) myvar; 
 
     generateTXL();
     int n = checkNumberOfFiles();
-    int i = 0, j = i+1;
+    int i = 0, j = i + 1;
 
     char txtFileList[n][128];
     fillList(txtFileList, n);
 
-    for(i=0; i<n; i++){
-        if(pthread_equal(tret1, pthread_self())){
-            if(i==0){
+    for (i = 0; i < n; i++)
+    {
+        if (pthread_equal(tret1, pthread_self()))
+        {
+            if (i == 0)
+            {
                 printf("%s\n", mag);
                 printf("%s: %d kata\n", txtFileList[i], checkTXLContent(txtFileList[i]));
                 printf("\n");
                 sleep(1);
-            }else{
+            }
+            else
+            {
                 i++;
                 printf("%s\n", mag);
                 printf("%s: %d kata\n", txtFileList[i], checkTXLContent(txtFileList[i]));
                 printf("\n");
                 sleep(1);
             }
-        }else if(pthread_equal(tret2, pthread_self())){
+        }
+        else if (pthread_equal(tret2, pthread_self()))
+        {
             i++;
             printf("%s\n", mag);
             printf("%s: %d kata\n", txtFileList[i], checkTXLContent(txtFileList[i]));
@@ -143,6 +151,7 @@ void *myfunc(void *myvar){
             sleep(1);
         }
     }
+
     return NULL;
 }
 
@@ -152,7 +161,7 @@ int main()
     printf("Fork or Thread? (F/T)\n");
     scanf(" %c", &c);
 
-    if(c == 'F')
+    if (c == 'F')
     {
         generateTXL();
 
@@ -166,7 +175,7 @@ int main()
 
         forkedProcess(txtFileList, nFiles);
     }
-    else if(c == 'T')
+    else if (c == 'T')
     {
 
         char *mag1 = "== First Thread ==\n";

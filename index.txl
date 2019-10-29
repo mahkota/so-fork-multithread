@@ -7,4 +7,3 @@ text6.txt
 text7.txt
 text8.txt
 EOF
-EOF
