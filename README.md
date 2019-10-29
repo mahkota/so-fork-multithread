@@ -15,4 +15,5 @@ Cara Kerja Program:
 3. Program akan membaca file "index.txl" dan menjadikannya patokan untuk menghitung jumlah kata.
 4. Penghitungan jumlah kata akan dijalankan dengan fork/multi-threading tergantung permintaan.
 
-Catatan: Masih ada bug pada multi-thread yang menyebabkan line terakhir masih mencetak "first thread". Kami masih belum bisa memperbaiki bug tersebut.
+Catatan:
+1. Masih ada bug pada multi-thread yang menyebabkan line terakhir masih mencetak "first thread". Kami masih belum bisa memperbaiki bug tersebut.
